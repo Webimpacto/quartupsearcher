@@ -1,28 +1,28 @@
 <?php
 /**
-* 2009-2016 Webimpacto
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to info@webimpacto.es so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade Webimpacto to newer
-* versions in the future. If you wish to customize Webimpacto for your
-* needs please refer to http://www.webimpacto.es for more information.
-*
-*  @author    Webimpacto Consulting S.L. <info@webimpacto.es>
-*  @copyright 2009-2016 Webimpacto Consulting S.L.
-*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of Webimpacto Consulting S.L.
-*/
+ * 2009-2016 Webimpacto
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to info@webimpacto.es so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Webimpacto to newer
+ * versions in the future. If you wish to customize Webimpacto for your
+ * needs please refer to http://www.webimpacto.es for more information.
+ *
+ *  @author    Webimpacto Consulting S.L. <info@webimpacto.es>
+ *  @copyright 2009-2016 Webimpacto Consulting S.L.
+ *  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ *  International Registered Trademark & Property of Webimpacto Consulting S.L.
+ */
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -56,11 +56,11 @@ class Quartupsearcher extends Module
         Configuration::updateValue('QUSEARCHER_NUSOAP', false);
 
         return parent::install() &&
-            $this->registerHook('header') &&
-            $this->registerHook('displayHeader') &&
-            $this->registerHook('displayMobileTopSiteMap') &&
-            $this->registerHook('displayNav') &&
-            $this->registerHook('displayTop');
+        $this->registerHook('header') &&
+        $this->registerHook('displayHeader') &&
+        $this->registerHook('displayMobileTopSiteMap') &&
+        $this->registerHook('displayNav') &&
+        $this->registerHook('displayTop');
     }
 
     public function uninstall()
@@ -91,7 +91,7 @@ class Quartupsearcher extends Module
 
         $output = $this->context->smarty->fetch($this->local_path.'views/templates/admin/configure.tpl');
 
-        $output.= $this->renderForm();
+        //$output.= $this->renderForm();
         if (_PS_VERSION_ < 1.6) {
             $output .= $style15;
         }
@@ -134,8 +134,8 @@ class Quartupsearcher extends Module
         return array(
             'form' => array(
                 'legend' => array(
-                'title' => $this->l('Settings'),
-                'icon' => 'icon-cogs',
+                    'title' => $this->l('Settings'),
+                    'icon' => 'icon-cogs',
                 ),
                 'input' => array(
                     array(
@@ -242,8 +242,8 @@ class Quartupsearcher extends Module
      */
     public function hookHeader()
     {
-        $this->context->controller->addJS($this->_path.'/views/js/front.js');
-        $this->context->controller->addCSS($this->_path.'/views/css/front.css');
+        //$this->context->controller->addJS($this->_path.'/views/js/front.js');
+        //$this->context->controller->addCSS($this->_path.'/views/css/front.css');
     }
 
     public function hookDisplayHeader()
@@ -265,15 +265,15 @@ class Quartupsearcher extends Module
     {
         /* Place your code here. */
     }
-    
+
     public function testSearch(){
         $aPar = array();
-        $aPar['reference'] = '01010m';
+        $aPar['reference'] = 'CE247A';
         $aPar['pending_date'] = '99991231';
         $this->makeSearch($aPar,true);
     }
-    
-    
+
+
     /**
      * Función para realizar una búsqueda usando el método qu_getProductByReference_c
      * @method qu_getProductByReference_c
@@ -282,13 +282,14 @@ class Quartupsearcher extends Module
      * @return array Resultado de búsqueda en caso correcto
      */
     public function makeSearch($data,$debug=false){
-        
-        $debug  = Configuration::get('QUSEARCHER_DEBUG', null);
+
+        $debug  = Configuration::get('QUSEARCHER_DEBUG', null, false);
         $client = $this->startQuartupClient($debug);
-        
-        return $this->executeWS($client, 'qu_getProductByReference_c', $data);
+        //p($debug);
+        //p($client);
+        return $this->executeWS($client, 'qu_getProductByReference_c', $data, $debug);
     }
-    
+
     /**
      * Inicializa el cliente Quartup con las variables seteadas en la configuración del módulo
      * @param boolean $debug Si queremos que se muestre la información debug
@@ -299,10 +300,10 @@ class Quartupsearcher extends Module
             $mtI0 = microtime(true);
         }
         $aConfig = array();
-        $aConfig['url_srv']     = Configuration::get('QUSEARCHER_NUSOAP', null);
-        $aConfig['usr_quartup'] = Configuration::get('QUSEARCHER_NUSOAP', null);
-        $aConfig['pass_quartup']= Configuration::get('QUSEARCHER_NUSOAP', null);
-        $aConfig['emp_quartup'] = Configuration::get('QUSEARCHER_NUSOAP', null);
+        $aConfig['url_srv']     = Configuration::get('QUSEARCHER_URL_SRV', null);
+        $aConfig['usr_quartup'] = Configuration::get('QUSEARCHER_USER_SRV', null);
+        $aConfig['pass_quartup']= Configuration::get('QUSEARCHER_PASS', null);
+        $aConfig['emp_quartup'] = Configuration::get('QUSEARCHER_EMP_SRV', null);
         $swWS = Configuration::get('QUSEARCHER_NUSOAP', null);
 
         $quartupClient = new QU_XwsClient(0, $aConfig, $swWS);
@@ -314,7 +315,7 @@ class Quartupsearcher extends Module
         }
         return false;
     }
-    
+
     /**
      * Ejecuta la función data en "method" contra la API
      * @param QU_XwsClient $oClient Cliente Quartup
