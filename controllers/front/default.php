@@ -25,7 +25,7 @@
 */
 
 // Include Module
-include_once(dirname(__FILE__) . '/../../quartupsearcher.php');
+include_once(dirname(__FILE__).'/../../quartupsearcher.php');
 
 class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 {
@@ -72,8 +72,8 @@ class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 			//ddd($product_searcher);
 			$this->context->smarty->assign(
 					array(
-						'search_query' => $search,
-						'product_searcher' => $product_searcher
+							'search_query' => $search,
+							'product_searcher' => $product_searcher
 					)
 			);
 		}
