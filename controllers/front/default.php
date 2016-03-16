@@ -58,24 +58,29 @@ class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 		//Only controller content initialization when the user use the normal search
 		parent::initContent();
 
-		if (((bool)Tools::isSubmit('quartupsearcher_button')) == true) {
-			$search = Tools::getValue('search_query');
-			$aPar = array();
-			$aPar['reference'] = 'CE247A';
-			//$aPar['pending_date'] = '99991231';
-			$module = Module::getInstanceByName('quartupsearcher');
-			$data = $module->makeSearch($aPar, false);
-			//$data = $module->testSearch();
+		if (((bool)Tools::isSubmit('quartupsearcher_button')) == true || ((bool)Tools::isSubmit('submit_quartupsearcher_top')) == true) {
+			$search = Tools::getValue('quartupsearch_query');
 
-			//ddd($data);
-			$product_searcher = $data['aRet'];
-			//ddd($product_searcher);
-			$this->context->smarty->assign(
-					array(
-							'search_query' => $search,
-							'product_searcher' => $product_searcher
-					)
-			);
+			if(!empty($search)) {
+
+				$aPar = array();
+				//$aPar['reference'] = 'CE247A';
+				$aPar['reference'] = $search;
+				//$aPar['pending_date'] = '99991231';
+				$module = Module::getInstanceByName('quartupsearcher');
+				$data = $module->makeSearch($aPar, false);
+				//$data = $module->testSearch();
+
+				//ddd($data);
+				$product_searcher = $data['aRet'];
+				//ddd($product_searcher);
+				$this->context->smarty->assign(
+						array(
+								'quartupsearch_query' => $search,
+								'product_searcher' => $product_searcher
+						)
+				);
+			}
 		}
 
 
@@ -83,21 +88,6 @@ class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 		$this->setTemplate('quartupsearcher.tpl');
 	}
 
-	public function displayHeader($display = true)
-	{
-		/*if (!$this->instant_search && !$this->ajax_search) {
-			parent::displayHeader();
-		} else {
-			$this->context->smarty->assign('static_token', Tools::getToken(false));
-		}*/
-	}
-
-	public function displayFooter($display = true)
-	{
-		/*if (!$this->instant_search && !$this->ajax_search) {
-			parent::displayFooter();
-		}*/
-	}
 
 	public function setMedia()
 	{

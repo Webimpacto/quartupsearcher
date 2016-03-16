@@ -29,7 +29,7 @@
     <form method="post" action="{$link->getModuleLink('quartupsearcher', 'default')|escape:'html'}" id="quartupsearcherbox">
         <p class="block_content">
             <label for="quartupsearcher_query_block">{l s='Búsqueda por código:' mod='quartupsearcher'}</label>
-            <input class="quartupsearcher_query" type="text" id="quartupsearcher_query_block" name="search_query" value="{if isset($search_query) && $search_query}{$search_query|escape:'html':'UTF-8'|stripslashes}{/if}" />
+            <input class="quartupsearcher_query" type="text" id="quartupsearcher_query_block" name="quartupsearch_query" value="{if isset($quartupsearch_query) && $quartupsearch_query}{$quartupsearch_query|escape:'html':'UTF-8'|stripslashes}{/if}" />
             <input type="submit" name="quartupsearcher_button" id="quartupsearcher_button" class="btn btn-primary" value="{l s='Buscar' mod='quartupsearcher'}" />
         </p>
     </form>
@@ -52,7 +52,7 @@
             <tbody>
             {foreach $product_searcher as $product}
                 <tr id="" class="">
-                    <td>{$search_query}</td>
+                    <td>{$quartupsearch_query}</td>
                     <td>{$product.description}</td>
                     <td>{$product.priceTaxInc}</td>
                     <td><input class="quantity" type="text" id="quantity-searcher" name="quantity-searcher" value="1" /></td>

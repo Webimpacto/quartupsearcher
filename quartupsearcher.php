@@ -242,13 +242,13 @@ class Quartupsearcher extends Module
      */
     public function hookHeader()
     {
-        //$this->context->controller->addJS($this->_path.'/views/js/front.js');
-        //$this->context->controller->addCSS($this->_path.'/views/css/front.css');
+        $this->context->controller->addJS($this->_path.'/views/js/front.js');
+        $this->context->controller->addCSS($this->_path.'/views/css/front.css');
     }
 
     public function hookDisplayHeader()
     {
-        /* Place your code here. */
+        return $this->hookHeader();
     }
 
     public function hookDisplayMobileTopSiteMap()
@@ -261,9 +261,19 @@ class Quartupsearcher extends Module
         /* Place your code here. */
     }
 
-    public function hookDisplayTop()
+    public function hookTop($params)
     {
-        /* Place your code here. */
+        $key = $this->getCacheId('quartupsearcher-top'.((!isset($params['hook_mobile']) || !$params['hook_mobile']) ? '' : '-hook_mobile'));
+        if (Tools::getValue('quartupsearch_query') || !$this->isCached('quartupsearcher-top.tpl', $key))
+        {
+            $this->smarty->assign(array(
+                    //'blocksearch_type' => 'top',
+                    'quartupsearch_query' => (string)Tools::getValue('quartupsearch_query')
+                )
+            );
+        }
+        //Media::addJsDef(array('quartupsearcher' => 'top'));
+        return $this->display(__FILE__, 'quartupsearcher-top.tpl', Tools::getValue('quartupsearch_query') ? null : $key);
     }
 
     public function testSearch(){
