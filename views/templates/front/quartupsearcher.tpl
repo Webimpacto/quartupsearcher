@@ -56,7 +56,7 @@
                     <td>{$product.description}</td>
                     <td>{$product.priceTaxInc}</td>
                     <td><input class="quantity" type="text" id="quantity-searcher" name="quantity-searcher" value="1" /></td>
-                    <td><a class="button ajax_add_to_cart_button btn btn-default" href="{$link->getPageLink('cart', true, NULL, $smarty.capture.default, false)|escape:'html':'UTF-8'}" rel="nofollow" title="Añadir al carrito" {if isset($product.id_product_attribute)}data-id-product-attribute="{$product.id_product_attribute|intval}"{/if} data-id-product="{$product.id|intval}" data-minimal_quantity="1" onclick="$(this).attr('data-minimal_quantity',$('#quantity-searcher').val());">
+                    <td><a class="button ajax_add_to_cart_button btn btn-default" href="{$link->getPageLink('cart', true, NULL, $smarty.capture.default, false)|escape:'html':'UTF-8'}" rel="nofollow" title="Añadir al carrito" {if isset($product.id_product_attribute)}data-id-product-attribute="{$product.id_product_attribute|intval}"{/if} data-id-product="{$product.id|intval}" data-minimal_quantity="1" onclick="$(this).data('minimal_quantity',$('#quantity-searcher').val());">
                             <span>Añadir al carrito</span>
                         </a></td>
                 </tr>
