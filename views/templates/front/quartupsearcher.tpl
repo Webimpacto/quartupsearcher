@@ -36,30 +36,44 @@
 </div>
 <!-- /Block quartupsearcher module -->
 <!-- Table quartupsearcher module -->
-<pre class="hidden">{$product_searcher|@print_r}</pre>
 {if isset($product_searcher) && $product_searcher}
+    <pre class="hidden">{$product_searcher|@print_r}</pre>
     <div class="quartupsearcher-table">
         <table id="quartupsearcher-table" class="table table-bordered">
             <thead>
             <tr>
-                <th>{l s='Código'}</th>
-                <th>{l s='Descripción'}</th>
-                <th>{l s='Precio/und'}</th>
-                <th>{l s='Cantidad'}</th>
+                <th>{l s='Código' mod='quartupsearcher'}</th>
+                <th>{l s='Descripción' mod='quartupsearcher'}</th>
+                <th>{l s='Precio/und' mod='quartupsearcher'}</th>
+                <th>{l s='Cantidad' mod='quartupsearcher'}</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             {foreach $product_searcher as $product}
-                <tr id="" class="">
+                <tr>
                     <td>{$quartupsearch_query}</td>
                     <td>{$product.description}</td>
                     <td>{$product.priceTaxInc}</td>
                     <td><input class="quantity" type="text" id="quantity-searcher" name="quantity-searcher" value="1" /></td>
-                    <td><a class="button ajax_add_to_cart_button btn btn-default" href="{$link->getPageLink('cart', true, NULL, $smarty.capture.default, false)|escape:'html':'UTF-8'}" rel="nofollow" title="Añadir al carrito" {if isset($product.id_product_attribute)}data-id-product-attribute="{$product.id_product_attribute|intval}"{/if} data-id-product="{$product.id|intval}" data-minimal_quantity="1" onclick="$(this).data('minimal_quantity',$('#quantity-searcher').val());">
-                            <span>Añadir al carrito</span>
-                        </a></td>
+                    <td>
+                        <a class="button ajax_add_to_cart_button btn btn-default" href="{$link->getPageLink('cart', true, NULL, $smarty.capture.default, false)|escape:'html':'UTF-8'}" rel="nofollow" title="Añadir al carrito" {if isset($product.id_product_attribute)}data-id-product-attribute="{$product.id_product_attribute|intval}"{/if} data-id-product="{$product.id|intval}" data-minimal_quantity="1" onclick="$(this).data('minimal_quantity',$('#quantity-searcher').val());">
+                            <span>{l s='Añadir al carrito' mod='quartupsearcher'}</span>
+                        </a>
+                    </td>
                 </tr>
+                {if !empty($product.aaToReceive)}
+                    {foreach $product.aaToReceive as $aaToReceive}
+                        {if !empty($aaToReceive.dateToReceive)}
+                            <tr>
+                                <td colspan="5">
+                                    {assign var="fecha" value=DateTime::createFromFormat('Ymd', $aaToReceive.dateToReceive)}
+                                    <span class="label label-warning">{l s='Disponibilidad a partir de '  mod='quartupsearcher'}{$fecha->format('d/m/Y')}</span>
+                                </td>
+                            </tr>
+                        {/if}
+                    {/foreach}
+                {/if}
             {/foreach}
             </tbody>
         </table>
