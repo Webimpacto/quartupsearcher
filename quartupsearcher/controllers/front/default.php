@@ -73,11 +73,13 @@ class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 
 				$product_searcher = $data['aRet'];
 				$products = array();
-				foreach ($product_searcher as $product) {
-					if($product['type'] == 'N'){
-						$products['N'][] = $product;
-					}elseif($product['type'] == 'E'){
-						$products['E'][] = $product;
+				if(!empty($product_searcher)) {
+					foreach ($product_searcher as $product) {
+						if ($product['type'] == 'N') {
+							$products['N'][] = $product;
+						} elseif ($product['type'] == 'E') {
+							$products['E'][] = $product;
+						}
 					}
 				}
 

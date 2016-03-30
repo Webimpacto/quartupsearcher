@@ -38,8 +38,6 @@
 <!-- Table quartupsearcher module -->
 
 {if isset($product_searcher) && $product_searcher}
-
-    <pre class="hidden">{$product_searcher|@print_r}</pre>
     <div class="quartupsearcher-table">
         {foreach $product_searcher as $key => $products}
             {if $key == 'E'}
@@ -120,6 +118,12 @@
             </table>
         {/foreach}
     </div>
+{else}
+
+    <div class="alert alert-danger">
+        <p>{l s='Esta referencia no esta en nuestro catálogo.'}</p>
+    </div>
+
 {/if}
 <!-- /Table quartupsearcher module -->
 
