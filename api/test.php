@@ -43,7 +43,7 @@ executeWS($oClient, 'hello');
 $aPar = array();
 //$aPar['reference'] = '01010m';
 //$aPar['pending_date'] = '99991231';
-$aPar['reference'] = 'CE247A';
+$aPar['reference'] = $_GET['search'] ? $_GET['search'] : 'CE247A';
 executeWS($oClient, 'qu_getProductByReference_c', $aPar);
 
 // tiempo total

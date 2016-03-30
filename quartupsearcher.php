@@ -59,8 +59,7 @@ class Quartupsearcher extends Module
         $this->registerHook('header') &&
         $this->registerHook('displayHeader') &&
         $this->registerHook('displayMobileTopSiteMap') &&
-        $this->registerHook('displayNav') &&
-        $this->registerHook('displayTop');
+        $this->registerHook('displayNav');
     }
 
     public function uninstall()

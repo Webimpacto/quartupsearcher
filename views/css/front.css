@@ -95,3 +95,15 @@ form#quartupsearchbox .button.button-small i {
     margin-right: 0; }
 
 /*# sourceMappingURL=blocksearch.css.map */
+
+.quartupsearcher-table .quantity {
+    width: 50px;
+}
+.quartupsearcher-table .title-products{
+    padding: 5px 0 15px 0;
+}
+.quartupsearcher-table .title-product-e{
+    font-size: 14px;
+    color: #484848;
+    font-weight: bold;
+}

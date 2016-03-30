@@ -71,13 +71,21 @@ class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 				$data = $module->makeSearch($aPar, false);
 				//$data = $module->testSearch();
 
-				//ddd($data);
 				$product_searcher = $data['aRet'];
-				//ddd($product_searcher);
+				$products = array();
+				foreach ($product_searcher as $product) {
+					if($product['type'] == 'N'){
+						$products['N'][] = $product;
+					}elseif($product['type'] == 'E'){
+						$products['E'][] = $product;
+					}
+				}
+
+				//ddd($products);
 				$this->context->smarty->assign(
 						array(
 								'quartupsearch_query' => $search,
-								'product_searcher' => $product_searcher
+								'product_searcher' => $products
 						)
 				);
 			}
@@ -94,6 +102,7 @@ class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 		parent::setMedia();
 
 		$this->context->controller->addCSS(_MODULE_DIR_.'quartupsearcher/views/css/front.css');
+		$this->context->controller->addJS(_MODULE_DIR_.'quartupsearcher/views/js/front.js');
 		/*if (!$this->instant_search && !$this->ajax_search) {
 			$this->addCSS(_THEME_CSS_DIR_.'product_list.css');
 		}*/

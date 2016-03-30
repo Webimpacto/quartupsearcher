@@ -36,47 +36,89 @@
 </div>
 <!-- /Block quartupsearcher module -->
 <!-- Table quartupsearcher module -->
+
 {if isset($product_searcher) && $product_searcher}
+
     <pre class="hidden">{$product_searcher|@print_r}</pre>
     <div class="quartupsearcher-table">
-        <table id="quartupsearcher-table" class="table table-bordered">
-            <thead>
-            <tr>
-                <th>{l s='Código' mod='quartupsearcher'}</th>
-                <th>{l s='Descripción' mod='quartupsearcher'}</th>
-                <th>{l s='Precio/und' mod='quartupsearcher'}</th>
-                <th>{l s='Cantidad' mod='quartupsearcher'}</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {foreach $product_searcher as $product}
+        {foreach $product_searcher as $key => $products}
+            {if $key == 'E'}
+                <div class="title-products"><span class="title-product-e">Productos equivalentes</span></div>
+            {/if}
+            <table id="quartupsearcher-table-{$key}" class="table table-bordered">
+                <thead>
                 <tr>
-                    <td>{$quartupsearch_query}</td>
-                    <td>{$product.description}</td>
-                    <td>{$product.priceTaxInc}</td>
-                    <td><input class="quantity" type="text" id="quantity-searcher" name="quantity-searcher" value="1" /></td>
-                    <td>
-                        <a class="button ajax_add_to_cart_button btn btn-default" href="{$link->getPageLink('cart', true, NULL, $smarty.capture.default, false)|escape:'html':'UTF-8'}" rel="nofollow" title="Añadir al carrito" {if isset($product.id_product_attribute)}data-id-product-attribute="{$product.id_product_attribute|intval}"{/if} data-id-product="{$product.id|intval}" data-minimal_quantity="1" onclick="$(this).data('minimal_quantity',$('#quantity-searcher').val());">
-                            <span>{l s='Añadir al carrito' mod='quartupsearcher'}</span>
-                        </a>
-                    </td>
+                    <th>{l s='Código' mod='quartupsearcher'}</th>
+                    <th>{l s='Descripción' mod='quartupsearcher'}</th>
+                    <th>{l s='Precio/und' mod='quartupsearcher'}</th>
+                    <th>{l s='Cantidad' mod='quartupsearcher'}</th>
+                    <th></th>
                 </tr>
-                {if !empty($product.aaToReceive)}
-                    {foreach $product.aaToReceive as $aaToReceive}
-                        {if !empty($aaToReceive.dateToReceive)}
-                            <tr>
-                                <td colspan="5">
-                                    {assign var="fecha" value=DateTime::createFromFormat('Ymd', $aaToReceive.dateToReceive)}
-                                    <span class="label label-warning">{l s='Disponibilidad a partir de '  mod='quartupsearcher'}{$fecha->format('d/m/Y')}</span>
-                                </td>
-                            </tr>
-                        {/if}
-                    {/foreach}
-                {/if}
-            {/foreach}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {foreach $products as $product}
+                    <tr>
+                        <td>{$product.reference}</td>
+                        <td>{$product.description}</td>
+                        <td>{$product.priceTaxInc}</td>
+                        <td><input class="quantity" type="text" id="quantity-searcher" name="quantity-searcher" value="1" /></td>
+                        <td>
+                            <a class="button ajax_add_to_cart_button btn btn-default"
+                               href="{$link->getPageLink('cart', true, NULL, $smarty.capture.default, false)|escape:'html':'UTF-8'}"
+                               rel="nofollow"
+                               title="Añadir al carrito"
+                               {if isset($product.id_product_attribute)}data-id-product-attribute="{$product.id_product_attribute|intval}"{/if}
+                               data-id-product="{$product.id|intval}"
+                               data-minimal_quantity="1"
+                               data-stock="{$product.stock|intval}"
+                               data-stock-to-receive="{$product.stockToReceive|intval}"
+                               data-reference="{$product.reference}"
+                               onclick="$(this).data('minimal_quantity',$('#quantity-searcher').val());add_product_quartup($(this))">
+                                <span>{l s='Añadir al carrito' mod='quartupsearcher'}</span>
+                            </a>
+                        </td>
+                    </tr>
+                    {if $product.stock > 0}
+                        <tr class="msj-{$product.reference}">
+                            <td colspan="5" class="text-center">
+                                <span class="label label-success">{l s='Artículo disponible '  mod='quartupsearcher'}</span>
+                            </td>
+                        </tr>
+                    {elseif $product.stock <= 0}
+                        <tr class="msj-{$product.reference}">
+                            <td colspan="5" class="text-center">
+                                <span class="label label-danger">{l s='Sin disponibilidad '  mod='quartupsearcher'}</span>
+                            </td>
+                        </tr>
+                    {/if}
+                    {if !empty($product.aaToReceive) && $product.stock <= 0}
+                        {foreach $product.aaToReceive as $aaToReceive}
+                            {if !empty($aaToReceive.dateToReceive)}
+                                <tr class="msj-{$product.reference}"  {if $product.stock > 0}style="display:none;"{/if}>
+                                    <td colspan="5" class="text-center">
+                                        {assign var="fecha" value=DateTime::createFromFormat('Ymd', $aaToReceive.dateToReceive)}
+                                        <span class="label label-warning">{l s='Disponibilidad a partir de '  mod='quartupsearcher'}{$fecha->format('d/m/Y')}</span>
+                                    </td>
+                                </tr>
+                            {/if}
+                        {/foreach}
+                    {elseif $product.stock > 0 && $product.stockToReceive > 0}
+                        {foreach $product.aaToReceive as $aaToReceive}
+                            {if !empty($aaToReceive.dateToReceive)}
+                                <tr class="msj-{$product.reference}" id="stock-parcial-{$product.reference}" {if $product.stock > 0}style="display:none;"{/if}>
+                                    <td colspan="5" class="text-center">
+                                        {assign var="fecha" value=DateTime::createFromFormat('Ymd', $aaToReceive.dateToReceive)}
+                                        <span class="label label-warning">{l s='Articulo Disponible Parcialmente.'  mod='quartupsearcher'}{l s=' Stock Actual: '}
+                                            <span class="stock-to-receive">{$product.stockToReceive|intval}</span> {l s=' unds. '} {l s='Resto: Disponibilidad a partir de '  mod='quartupsearcher'}{$fecha->format('d/m/Y')}</span>
+                                    </td>
+                                </tr>
+                            {/if}
+                        {/foreach}
+                    {/if}
+                {/foreach}
+                </tbody>
+            </table>
+        {/foreach}
     </div>
 {/if}
 <!-- /Table quartupsearcher module -->
