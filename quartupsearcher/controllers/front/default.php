@@ -66,7 +66,10 @@ class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 				$aPar = array();
 				//$aPar['reference'] = 'CE247A';
 				$aPar['reference'] = $search;
-				//$aPar['pending_date'] = '99991231';
+				if(!empty($this->context->customer) && $this->context->customer->isLogged())
+					$aPar['id_customer'] = (int)$this->context->customer->id;
+				$aPar['pending_date'] = '99991231';
+				//ddd($aPar);
 				$module = Module::getInstanceByName('quartupsearcher');
 				$data = $module->makeSearch($aPar, false);
 				//$data = $module->testSearch();
@@ -90,7 +93,16 @@ class QuartupsearcherDefaultModuleFrontController extends ModuleFrontController
 								'product_searcher' => $products
 						)
 				);
+			}else{
+				$this->context->smarty->assign(
+						array(
+								'quartupsearch_query' => $search,
+								'product_searcher' => false
+						)
+				);
 			}
+
+
 		}
 
 
