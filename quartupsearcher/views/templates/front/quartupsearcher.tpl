@@ -121,7 +121,7 @@
 {elseif (isset($product_searcher) && !$product_searcher)}
 
     <div class="alert alert-danger">
-        <p>{l s='Esta referencia no esta en nuestro catálogo.' mod='quartupsearcher's}</p>
+        <p>{l s='Esta referencia no esta en nuestro catálogo.' mod='quartupsearcher'}</p>
     </div>
 
 {/if}
