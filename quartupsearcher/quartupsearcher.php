@@ -59,7 +59,9 @@ class Quartupsearcher extends Module
         $this->registerHook('header') &&
         $this->registerHook('displayHeader') &&
         $this->registerHook('displayMobileTopSiteMap') &&
-        $this->registerHook('displayNav');
+        $this->registerHook('displayNav') &&
+        $this->registerHook('displayCustomerAccount') &&
+        $this->registerHook('displayMyAccountBlock');
     }
 
     public function uninstall()
@@ -274,6 +276,14 @@ class Quartupsearcher extends Module
         //Media::addJsDef(array('quartupsearcher' => 'top'));
         return $this->display(__FILE__, 'quartupsearcher-top.tpl', Tools::getValue('quartupsearch_query') ? null : $key);
     }
+    
+    public function hookDisplayCustomerAccount(){
+        return $this->display(__FILE__, 'my-account.tpl');
+    }
+    
+    public function hookDisplayMyAccountBlock($params) {
+        return $this->hookDisplayCustomerAccount($params);
+    }
 
     public function testSearch(){
         $aPar = array();
@@ -291,11 +301,8 @@ class Quartupsearcher extends Module
      * @return array Resultado de búsqueda en caso correcto
      */
     public function makeSearch($data,$debug=false){
-
         $debug  = Configuration::get('QUSEARCHER_DEBUG', null, false);
         $client = $this->startQuartupClient($debug);
-        //p($debug);
-        //p($client);
         return $this->executeWS($client, 'qu_getProductByReference_c', $data, $debug);
     }
 
@@ -352,5 +359,31 @@ class Quartupsearcher extends Module
             echo "<b>Elapsed time: ".(microtime(true)-$mtI0)."</b><br>\n";
         }
         return $result;
+    }
+    
+    /**
+     * Wrapper para el controlador de mi cuenta, devuelve los pedidos para ese usuario
+     * @param int $id_customer Id del cliente
+     * @return array de pedidos
+     */
+    public function getAdvancedOrders($id_customer){
+        $aPar = array();
+        $aPar['id_shop'] = Context::getContext()->shop->id;
+        $aPar['id_customer'] = $id_customer;
+        $aPar['sw_detail'] = 1;
+        return $this->makeSearchOrders($aPar,false);
+        
+    }
+    
+    /**
+     * Ejecuta la búsqueda de pedidos con el método API qu_getOrders_c
+     * @param array $data el aPar con los datos a buscar pedidos
+     * @param boolean $debug Modo debug, false, al final se usa la variable del módulo
+     * @return array con los pedidos
+     */
+    public function makeSearchOrders($data,$debug=false){
+        $debug  = Configuration::get('QUSEARCHER_DEBUG', null, false);
+        $client = $this->startQuartupClient($debug);
+        return $this->executeWS($client, 'qu_getOrders_c', $data, $debug);
     }
 }
