@@ -276,11 +276,11 @@ class Quartupsearcher extends Module
         //Media::addJsDef(array('quartupsearcher' => 'top'));
         return $this->display(__FILE__, 'quartupsearcher-top.tpl', Tools::getValue('quartupsearch_query') ? null : $key);
     }
-    
+
     public function hookDisplayCustomerAccount(){
         return $this->display(__FILE__, 'my-account.tpl');
     }
-    
+
     public function hookDisplayMyAccountBlock($params) {
         return $this->hookDisplayCustomerAccount($params);
     }
@@ -360,7 +360,7 @@ class Quartupsearcher extends Module
         }
         return $result;
     }
-    
+
     /**
      * Wrapper para el controlador de mi cuenta, devuelve los pedidos para ese usuario
      * @param int $id_customer Id del cliente
@@ -368,13 +368,16 @@ class Quartupsearcher extends Module
      */
     public function getAdvancedOrders($id_customer){
         $aPar = array();
-        $aPar['id_shop'] = Context::getContext()->shop->id;
-        $aPar['id_customer'] = $id_customer;
+        //$aPar['id_shop'] = Context::getContext()->shop->id;
+        $aPar['id_customer'] = Context::getContext()->Cumtomer->id;
+        $aPar['date_from']   = '20160101';
+        $aPar['date_to']     = '20160331';
+        $aPar['sw_only_pending'] = '0';
         $aPar['sw_detail'] = 1;
         return $this->makeSearchOrders($aPar,false);
-        
+
     }
-    
+
     /**
      * Ejecuta la búsqueda de pedidos con el método API qu_getOrders_c
      * @param array $data el aPar con los datos a buscar pedidos

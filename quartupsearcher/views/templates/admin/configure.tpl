@@ -40,9 +40,9 @@
 	<h3><i class="icon icon-tags"></i> {l s='Documentation' mod='quartupsearcher'}</h3>
 	<p>
 		&raquo; {l s='You can get a PDF documentation to configure this module' mod='quartupsearcher'} :
-		<ul>
-			<li><a href="#" target="_blank">{l s='English' mod='quartupsearcher'}</a></li>
-			<li><a href="#" target="_blank">{l s='French' mod='quartupsearcher'}</a></li>
-		</ul>
+	<ul>
+		<li><a href="#" target="_blank">{l s='English' mod='quartupsearcher'}</a></li>
+		<li><a href="#" target="_blank">{l s='French' mod='quartupsearcher'}</a></li>
+	</ul>
 	</p>
 </div>

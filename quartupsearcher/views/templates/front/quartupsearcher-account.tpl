@@ -22,64 +22,148 @@
 * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 * International Registered Trademark & Property of PrestaShop SA
 *}
+<style type="text/css">
+	table#order-list tr.details td{
+		padding: 9px 8px 11px 8px;
+	}
+</style>
 
-<script type="text/javascript">
-/*$('document').ready(function()
-{
-	$('img[rel^=ajax_id_quartupsearcher_]').click(function()
-	{
-		var ids =  $(this).attr('rel').replace('ajax_id_quartupsearcher_', '');
-		ids = ids.split('_');
-		var id_product_mail_alert = ids[0];
-		var id_product_attribute_mail_alert = ids[1];
-		var parent = $(this).parent().parent();
-
-		$.ajax({
-			url: "{$link->getModuleLink('quartupsearcher', 'actions', ['process' => 'remove'])|addslashes}",
-			type: "POST",
-			data: {
-				'id_product': id_product_mail_alert,
-				'id_product_attribute': id_product_attribute_mail_alert
-			},
-			success: function(result)
-			{
-				if (result == '0')
-				{
-					parent.fadeOut("normal", function()
-					{
-						parent.remove();
-					});
-				}
- 		 	}
-		});
-	});
-});*/
-</script>
 
 {capture name=path}<a href="{$link->getPageLink('my-account', true)|escape:'html'}" title="{l s='Manage my account' mod='quartupsearcher'}" rel="nofollow">{l s='My account' mod='quartupsearcher'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Histórico avanzado' mod='quartupsearcher'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <div id="quartupsearcher_block_account">
-	<h2>{l s='Mi histórico avanzado' mod='quartupsearcher'}</h2>
-	{if $quartupsearcher_orders}
-		<div>
-			{foreach from=$quartupsearcher_orders item=qorder}
-			<div class="quartupsearcher clearfix">
-				<!--<a href="{$link->getProductLink($qorder.id_product, null, null, null, null, $qorder.id_shop)}" title="{$qorder.name|escape:'html':'UTF-8'}" class="product_img_link"><img src="{$link->getImageLink($qorder.link_rewrite, $qorder.cover, 'small_default')|escape:'html'}" alt=""/></a>
-				<h3><a href="{$link->getProductLink($qorder.id_product, null, null, null, null, $qorder.id_shop)|escape:'html'}" title="{$qorder.name|escape:'html':'UTF-8'}">{$qorder.name|escape:'html':'UTF-8'}</a></h3>
-				<div class="product_desc">{$qorder.attributes_small|escape:'html':'UTF-8'}</div>
+	<h1 class="page-heading bottom-indent">{l s='Mi histórico avanzado' mod='quartupsearcher'}</h1>
 
-				<div class="remove">
-					<img rel="ajax_id_quartupsearcher_{$qorder.id_product|intval}_{$qorder.id_product_attribute|intval}" src="{$img_dir}icon/delete.gif" alt="{l s='Remove' mod='quartupsearcher'}" class="icon" />
-				</div>-->
-			</div>
-			{/foreach}
-		</div>
-	{else}
-		<p class="warning">{l s='No hay pedidos a mostrar.' mod='quartupsearcher'}</p>
-	{/if}
+	<div class="block-center" id="block-history">
+		<a href="#" class="btn btn-default" onclick="$('.data-order').toggle();">Ver Datos</a>
+		<pre class="data-order" style="display: none;">{$quartupsearcher_orders|@print_r}</pre>
+		{if $quartupsearcher_orders && count($quartupsearcher_orders)}
+			<table id="order-list" class="table table-bordered footab">
+				<thead>
+				<tr>
+					<th class="first_item">{l s='Pedido' mod='quartupsearcher'}</th>
+					<th class="item">{l s='S/Ref' mod='quartupsearcher'}</th>
+					<th data-hide="phone" class="item">{l s='Referencia' mod='quartupsearcher'}</th>
+					<th class="item">{l s='Fecha ' mod='quartupsearcher'}</th>
+					<th class="item">{l s='Estado  ' mod='quartupsearcher'}</th>
+					<th data-sort-ignore="true" data-hide="phone,tablet" class="last_item">&nbsp;</th>
+				</tr>
+				</thead>
+				<tbody>
+				{foreach from=$quartupsearcher_orders.aRet item=qorder}
+					{assign var="id_order" value=$qorder.number}
+					<div class="quartupsearcher clearfix">
+						<tr id="order-{$id_order|intval}" class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{/if}">
+							<td class="history_link bold">
+								<a class="color-myaccount" href="javascript:showOrderDown({$id_order|intval});">
+									{$qorder.number}
+								</a>
+							</td>
+							<td>
+								{$qorder.cod_serie|escape:'html':'UTF-8'}
+							</td>
+							<td>
+								{$qorder.out_reference|escape:'html':'UTF-8'}
+							</td>
+							<td class="history_date bold">
+								{assign var="fecha" value=DateTime::createFromFormat('Ymd', $qorder.date)}
+								{$fecha->format('d/m/Y')}
+							</td>
+							<td class="history_state">
+								{if ($qorder.sw_state == 'P')}
+									{l s='Pendiente' mod='quartupsearcher'}
+								{elseif $qorder.sw_state == 'T'}
+									{l s='Traspasado' mod='quartupsearcher'}
+								{elseif $qorder.sw_state == 'D'}
+									{l s='Detenido' mod='quartupsearcher'} - {$qorder.cod_detention|escape:'html':'UTF-8'}
+								{/if}
+							</td>
+							<td class="history_detail">
+								<a class="btn btn-default button button-small" href="javascript:showOrderDown({$id_order|intval});">
+								<span>
+									{l s='Details'}<i class="icon-chevron-right right"></i>
+								</span>
+								</a>
+								{if isset($opc) && $opc}
+								<a class="link-button" href="{$link->getPageLink('order-opc', true, NULL, "submitReorder&id_order={$id_order|intval}")|escape:'html':'UTF-8'}" title="{l s='Reorder'}">
+									{else}
+									<a class="link-button" href="{$link->getPageLink('order', true, NULL, "submitReorder&id_order={$id_order|intval}")|escape:'html':'UTF-8'}" title="{l s='Reorder'}">
+										{/if}
+
+										<i class="icon-refresh"></i>{l s='Reorder'}
+
+									</a>
+							</td>
+						</tr>
+						<tr style="display: none;" id="details-{$id_order|intval}" class="details">
+							<td colspan="6">
+								{if $qorder.aaLines && count($qorder.aaLines)}
+									<table id="order-detail-list" class="table">
+										<thead>
+										<tr>
+											<th class="first_item">{l s='Código ' mod='quartupsearcher'}</th>
+											<th class="item">{l s='Artículo' mod='quartupsearcher'}</th>
+											<th class="item">{l s='Cant. Pedida ' mod='quartupsearcher'}</th>
+											<th class="item">{l s='Cant. Pdte ' mod='quartupsearcher'}</th>
+											<th class="item">{l s='Precio/u.' mod='quartupsearcher'}</th>
+											<th class="item">{l s='Precio Base ' mod='quartupsearcher'}</th>
+											<th class="item">{l s='Estado ' mod='quartupsearcher'}</th>
+											<th class="last_item">{l s='Fecha de entrega ' mod='quartupsearcher'}</th>
+										</tr>
+										</thead>
+										<tbody>
+										{foreach from=$qorder.aaLines item=qlines}
+											<tr id="order-details-{$id_order|intval}" class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{/if}">
+												<td>{$qlines.reference_product|escape:'html':'UTF-8'}</td>
+												<td>{$qlines.description|escape:'html':'UTF-8'}</td>
+												<td>{$qlines.quantity|intval}</td>
+												<td>{$qlines.quantity_pending|intval}</td>
+												<td>{displayPrice price=$qlines.price}</td>
+												<td>{displayPrice price=($qlines.price*$qlines.quantity)}</td>
+												<td>
+													{if ($qlines.sw_state == 'P')}
+														{l s='Pendiente' mod='quartupsearcher'}
+													{elseif $qlines.sw_state == 'T'}
+														{l s='Traspasado' mod='quartupsearcher'}
+													{elseif $qlines.sw_state == 'D'}
+														{l s='Detenido' mod='quartupsearcher'} - {$qlines.cod_detention|escape:'html':'UTF-8'}
+													{/if}
+												</td>
+												<td></td>
+											</tr>
+										{/foreach}
+										</tbody>
+									</table>
+								{else}
+									{l s='No hay detalles para el pedido '}{$id_order|intval}
+								{/if}
+							</td>
+						</tr>
+						{*<a href="{$link->getProductLink($qorder.id_product, null, null, null, null, $qorder.id_shop)}" title="{$qorder.name|escape:'html':'UTF-8'}" class="product_img_link"><img src="{$link->getImageLink($qorder.link_rewrite, $qorder.cover, 'small_default')|escape:'html'}" alt=""/></a>
+                        <h3><a href="{$link->getProductLink($qorder.id_product, null, null, null, null, $qorder.id_shop)|escape:'html'}" title="{$qorder.name|escape:'html':'UTF-8'}">{$qorder.name|escape:'html':'UTF-8'}</a></h3>
+                        <div class="product_desc">{$qorder.attributes_small|escape:'html':'UTF-8'}</div>
+
+                        <div class="remove">
+                            <img rel="ajax_id_quartupsearcher_{$qorder.id_product|intval}_{$qorder.id_product_attribute|intval}" src="{$img_dir}icon/delete.gif" alt="{l s='Remove' mod='quartupsearcher'}" class="icon" />
+                        </div>*}
+					</div>
+				{/foreach}
+				</tbody>
+			</table>
+			<div id="block-order-detail" class="unvisible">&nbsp;</div>
+		{else}
+			<p class="warning">{l s='No hay pedidos a mostrar.' mod='quartupsearcher'}</p>
+		{/if}
+	</div>
 
 	<ul class="footer_links">
-		<li class="fleft"><a href="{$link->getPageLink('my-account', true)}" rel="nofollow"><img src="{$img_dir}icon/my-account.gif" alt="" class="icon" /></a><a href="{$link->getPageLink('my-account', true)|escape:'html'}" title="{l s='Back to Your Account' mod='quartupsearcher'}">{l s='Back to Your Account' mod='quartupsearcher'}</a></li>
+		<li class="fleft">
+			<a class="btn btn-default button button-small" href="{$link->getPageLink('my-account', true)|escape:'html':'UTF-8'}">
+				<span>
+					<i class="icon-chevron-left"></i> {l s='Back to Your Account' mod='quartupsearcher'}
+				</span>
+			</a>
+		</li>
 	</ul>
 </div>

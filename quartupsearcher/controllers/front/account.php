@@ -10,17 +10,24 @@ class QuartupsearcherAccountModuleFrontController extends ModuleFrontController
 
 		if (Context::getContext()->customer->id)
 		{
-                    if(Module::isInstalled('quartupsearcher') && Module::isEnabled('quartupsearcher')){
-                        $quartupsearcher = Module::getInstanceByName('quartupsearcher');
-                        $this->context->smarty->assign('id_customer', Context::getContext()->customer->id);
-			$this->context->smarty->assign(
-				'quartupsearcher_orders',
-				$quartupsearcher->getAdvancedOrders((int)Context::getContext()->customer->id)
-			);
+			if(Module::isInstalled('quartupsearcher') && Module::isEnabled('quartupsearcher')){
+				$quartupsearcher = Module::getInstanceByName('quartupsearcher');
+				$this->context->smarty->assign('id_customer', Context::getContext()->customer->id);
+				$this->context->smarty->assign(
+						'quartupsearcher_orders',
+						$quartupsearcher->getAdvancedOrders((int)Context::getContext()->customer->id)
+				);
 
-			$this->setTemplate('quartupsearcher-account.tpl');
-                    }
-			
+				$this->setTemplate('quartupsearcher-account.tpl');
+			}
+
 		}
+	}
+
+	public function setMedia()
+	{
+		parent::setMedia();
+
+		$this->context->controller->addJS(_MODULE_DIR_.'quartupsearcher/views/js/front-my-account.js');
 	}
 }

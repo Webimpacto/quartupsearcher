@@ -27,7 +27,7 @@
 	<form id="quartupsearchbox" method="post" action="{$link->getModuleLink('quartupsearcher', 'default')|escape:'html'}" >
 		<input class="search_query form-control" type="text" id="quartupsearch_query_top" name="quartupsearch_query" placeholder="{l s='Search' mod='quartupsearcher'}" value="{$quartupsearch_query|escape:'htmlall':'UTF-8'|stripslashes}" />
 		<button type="submit" name="submit_quartupsearcher_top" class="btn btn-default button-search">
-			<span>{l s='Search' mod='quartupsearcher'}}</span>
+			<span>{l s='Search' mod='quartupsearcher'}</span>
 		</button>
 	</form>
 </div>

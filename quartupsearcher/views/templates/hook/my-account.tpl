@@ -22,8 +22,12 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-<li class="quartupsearcher">
+
+<!-- MODULE QuartUp -->
+<li class="lnk_wishlist">
 	<a href="{$link->getModuleLink('quartupsearcher', 'account', array(), true)|escape:'html'}" title="{l s='Histórico avanzado' mod='quartupsearcher'}" rel="nofollow">
-		{l s='Histórico avanzado' mod='quartupsearcher'}
+		<i class="icon-list-ol"></i>
+		<span>{l s='Histórico avanzado' mod='quartupsearcher'}</span>
 	</a>
 </li>
+<!-- END : MODULE QuartUp -->
