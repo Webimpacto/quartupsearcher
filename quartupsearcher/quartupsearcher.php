@@ -370,6 +370,7 @@ class Quartupsearcher extends Module
         $aPar = array();
         //$aPar['id_shop'] = Context::getContext()->shop->id;
         $aPar['id_customer'] = Context::getContext()->Cumtomer->id;
+        //$aPar['id_customer'] = '5582';
         $aPar['date_from']   = '20160101';
         $aPar['date_to']     = '20160331';
         $aPar['sw_only_pending'] = '0';

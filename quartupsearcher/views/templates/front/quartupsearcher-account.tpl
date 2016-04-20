@@ -36,8 +36,6 @@
 	<h1 class="page-heading bottom-indent">{l s='Mi histórico avanzado' mod='quartupsearcher'}</h1>
 
 	<div class="block-center" id="block-history">
-		<a href="#" class="btn btn-default" onclick="$('.data-order').toggle();">Ver Datos</a>
-		<pre class="data-order" style="display: none;">{$quartupsearcher_orders|@print_r}</pre>
 		{if $quartupsearcher_orders && count($quartupsearcher_orders)}
 			<table id="order-list" class="table table-bordered footab">
 				<thead>
@@ -67,8 +65,10 @@
 								{$qorder.out_reference|escape:'html':'UTF-8'}
 							</td>
 							<td class="history_date bold">
-								{assign var="fecha" value=DateTime::createFromFormat('Ymd', $qorder.date)}
-								{$fecha->format('d/m/Y')}
+								{if (!empty($qorder.date))}
+									{assign var="fecha" value=DateTime::createFromFormat('Ymd', $qorder.date)}
+									{$fecha->format('d/m/Y')}
+								{/if}
 							</td>
 							<td class="history_state">
 								{if ($qorder.sw_state == 'P')}
@@ -140,13 +140,6 @@
 								{/if}
 							</td>
 						</tr>
-						{*<a href="{$link->getProductLink($qorder.id_product, null, null, null, null, $qorder.id_shop)}" title="{$qorder.name|escape:'html':'UTF-8'}" class="product_img_link"><img src="{$link->getImageLink($qorder.link_rewrite, $qorder.cover, 'small_default')|escape:'html'}" alt=""/></a>
-                        <h3><a href="{$link->getProductLink($qorder.id_product, null, null, null, null, $qorder.id_shop)|escape:'html'}" title="{$qorder.name|escape:'html':'UTF-8'}">{$qorder.name|escape:'html':'UTF-8'}</a></h3>
-                        <div class="product_desc">{$qorder.attributes_small|escape:'html':'UTF-8'}</div>
-
-                        <div class="remove">
-                            <img rel="ajax_id_quartupsearcher_{$qorder.id_product|intval}_{$qorder.id_product_attribute|intval}" src="{$img_dir}icon/delete.gif" alt="{l s='Remove' mod='quartupsearcher'}" class="icon" />
-                        </div>*}
 					</div>
 				{/foreach}
 				</tbody>
