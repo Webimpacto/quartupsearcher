@@ -55,7 +55,7 @@
                 </thead>
                 <tbody>
                 {foreach $products as $product}
-                    <tr>
+                    <tr class="row-{$product.id|intval}">
                         <td>{$product.reference}</td>
                         <td>{$product.description}</td>
                         <td>{$product.priceTaxInc}</td>
@@ -71,7 +71,7 @@
                                data-stock="{$product.stock|intval}"
                                data-stock-to-receive="{$product.stockToReceive|intval}"
                                data-reference="{$product.reference}"
-                               onclick="$(this).data('minimal_quantity',$('#quantity-searcher').val());add_product_quartup($(this))">
+                               onclick="$(this).data('minimal_quantity',$('.row-{$product.id|intval} #quantity-searcher').val());add_product_quartup($(this))">
                                 <span>{l s='Añadir al carrito' mod='quartupsearcher'}</span>
                             </a>
                         </td>
