@@ -58,7 +58,7 @@
                     <tr class="row-{$product.id|intval}">
                         <td>{$product.reference}</td>
                         <td>{$product.description}</td>
-                        <td>{$product.priceTaxInc}</td>
+                        <td>{$product.priceTaxExc}</td>
                         <td><input class="quantity" type="text" id="quantity-searcher" name="quantity-searcher" value="1" /></td>
                         <td>
                             <a class="button ajax_add_to_cart_button btn btn-default"
@@ -85,7 +85,7 @@
                     {elseif $product.stock <= 0}
                         <tr class="msj-{$product.reference}">
                             <td colspan="5" class="text-center">
-                                <span class="label label-danger">{l s='Sin disponibilidad '  mod='quartupsearcher'}</span>
+                                <span class="label label-danger">{l s='Disponibilidad de 7-10 días '  mod='quartupsearcher'}</span>
                             </td>
                         </tr>
                     {/if}
@@ -106,12 +106,19 @@
                                 <tr class="msj-{$product.reference}" id="stock-parcial-{$product.reference}" {if $product.stock > 0}style="display:none;"{/if}>
                                     <td colspan="5" class="text-center">
                                         {assign var="fecha" value=DateTime::createFromFormat('Ymd', $aaToReceive.dateToReceive)}
-                                        <span class="label label-warning">{l s='Articulo Disponible Parcialmente.'  mod='quartupsearcher'}{l s=' Stock Actual: '}
-                                            <span class="stock-to-receive">{$product.stockToReceive|intval}</span> {l s=' unds. '} {l s='Resto: Disponibilidad a partir de '  mod='quartupsearcher'}{$fecha->format('d/m/Y')}</span>
+                                        <span class="label label-warning">{l s='Articulo Disponible Parcialmente.'  mod='quartupsearcher'}<br/><br/>{l s=' Stock Actual: '}
+                                            <span class="stock-to-receive">{$product.stockToReceive|intval}</span> {l s=' unds. '} {l s='Disponibilidad a partir de '  mod='quartupsearcher'}{$fecha->format('d/m/Y')}</span>
                                     </td>
                                 </tr>
                             {/if}
                         {/foreach}
+                    {elseif $product.stock > 0 && empty($product.aaToReceive)}
+                        <tr class="msj-{$product.reference}" id="stock-parcial-{$product.reference}" {if $product.stock > 0}style="display:none;"{/if}>
+                            <td colspan="5" class="text-center">
+                                <span class="label label-warning">{l s='Articulo Disponible Parcialmente.'  mod='quartupsearcher'}<br/><br/>{l s=' Stock Actual: '}
+                                    <span class="stock-to-receive">{$product.stock|intval}</span> {l s=' unds. '} {l s='Disponibilidad a partir de 7-10 días'  mod='quartupsearcher'}</span>
+                            </td>
+                        </tr>
                     {/if}
                 {/foreach}
                 </tbody>
@@ -121,7 +128,7 @@
 {elseif (isset($product_searcher) && !$product_searcher)}
 
     <div class="alert alert-danger">
-        <p>{l s='Esta referencia no esta en nuestro catálogo.' mod='quartupsearcher'}</p>
+        <p>{l s='No hemos localizado ésta referencia en nuestro catálogo.' mod='quartupsearcher'}</p>
     </div>
 
 {/if}

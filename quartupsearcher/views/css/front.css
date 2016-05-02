@@ -103,7 +103,51 @@ form#quartupsearchbox .button.button-small i {
     padding: 5px 0 15px 0;
 }
 .quartupsearcher-table .title-product-e{
-    font-size: 14px;
-    color: #484848;
+    font-size: 16px;
+    color: #6998a0 !important;
     font-weight: bold;
+    text-transform: uppercase;
+}
+
+.quartupsearcher_query{
+
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 26px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.quartupsearcher_query_block{
+    font-size: 16px;
+
+}
+
+.alert_msg{
+
+    color: #f00;
+}
+
+.info_msg{
+    color: #08c;
+
+}
+
+.warning_msg{
+    color: #f89406;
+
+}
+.success_msg{
+    color: #468847;
+
+}
+
+.table td a.color-myaccount {
+    color: #08c;
+    text-decoration: underline;
+}
+
+.label {
+
+    font-size: 110% !important;
 }

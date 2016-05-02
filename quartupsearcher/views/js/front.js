@@ -35,6 +35,11 @@ function add_product_quartup(element) {
         $('#stock-parcial-'+reference).find('.stock-to-receive').text(stock);
         $('.msj-'+reference).hide();
         $('#stock-parcial-'+reference).show();
+    }else if(stock > 0 && stock < quantity && stockToReceive <= 0){
+        var reference = $(element).data('reference');
+        $('#stock-parcial-'+reference).find('.stock-to-receive').text(stock);
+        $('.msj-'+reference).hide();
+        $('#stock-parcial-'+reference).show();
     }
 
 };
