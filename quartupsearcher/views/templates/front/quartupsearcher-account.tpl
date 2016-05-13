@@ -41,7 +41,7 @@
 				<thead>
 				<tr>
 					<th class="first_item">{l s='Pedido' mod='quartupsearcher'}</th>
-					<th class="item">{l s='S/Ref' mod='quartupsearcher'}</th>
+					<th class="item">{l s='Serie' mod='quartupsearcher'}</th>
 					<th data-hide="phone" class="item">{l s='Referencia' mod='quartupsearcher'}</th>
 					<th class="item">{l s='Fecha ' mod='quartupsearcher'}</th>
 					<th class="item">{l s='Estado  ' mod='quartupsearcher'}</th>
@@ -70,19 +70,23 @@
 									{$fecha->format('d/m/Y')}
 								{/if}
 							</td>
-							<td class="history_state">
-								{if ($qorder.sw_state == 'P')}
-									{l s='Pendiente' mod='quartupsearcher'}
+
+							{if ($qorder.sw_state == 'P')}
+							<td class="history_state warning_msg">
+								{l s='Pendiente' mod='quartupsearcher'}
 								{elseif $qorder.sw_state == 'T'}
-									{l s='Traspasado' mod='quartupsearcher'}
+							<td class="history_state success_msg">
+								{l s='Enviado' mod='quartupsearcher'}
+
 								{elseif $qorder.sw_state == 'D'}
-									{l s='Detenido' mod='quartupsearcher'} - {$qorder.cod_detention|escape:'html':'UTF-8'}
+							<td class="history_state alert_msg">
+								{l s='Detenido' mod='quartupsearcher'} - {$qorder.cod_detention|escape:'html':'UTF-8'}
 								{/if}
 							</td>
 							<td class="history_detail">
 								<a class="btn btn-default button button-small" href="javascript:showOrderDown({$id_order|intval});">
 								<span>
-									{l s='Details'}<i class="icon-chevron-right right"></i>
+									{l s='Detalles'}<i class="icon-chevron-right right"></i>
 								</span>
 								</a>
 								{if isset($opc) && $opc}
@@ -115,22 +119,33 @@
 										<tbody>
 										{foreach from=$qorder.aaLines item=qlines}
 											<tr id="order-details-{$id_order|intval}" class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{/if}">
-												<td>{$qlines.reference_product|escape:'html':'UTF-8'}</td>
+												<td class="info_msg">{$qlines.reference_product|escape:'html':'UTF-8'}</td>
 												<td>{$qlines.description|escape:'html':'UTF-8'}</td>
-												<td>{$qlines.quantity|intval}</td>
-												<td>{$qlines.quantity_pending|intval}</td>
-												<td>{displayPrice price=$qlines.price}</td>
-												<td>{displayPrice price=($qlines.price*$qlines.quantity)}</td>
-												<td>
-													{if ($qlines.sw_state == 'P')}
-														{l s='Pendiente' mod='quartupsearcher'}
+												<td style="text-align: center">{$qlines.quantity|intval}</td>
+												<td style="text-align: center">{$qlines.quantity_pending|intval}</td>
+												<td style="text-align: right">{displayPrice price=$qlines.price}</td>
+												<td style="text-align: right">{displayPrice price=($qlines.price*$qlines.quantity)}</td>
+
+												{if ($qlines.sw_state == 'P')}
+												<td class="warning_msg">
+													{l s='Pendiente' mod='quartupsearcher'}
 													{elseif $qlines.sw_state == 'T'}
-														{l s='Traspasado' mod='quartupsearcher'}
+												<td class="success_msg">
+													{l s='Enviado' mod='quartupsearcher'}
 													{elseif $qlines.sw_state == 'D'}
-														{l s='Detenido' mod='quartupsearcher'} - {$qlines.cod_detention|escape:'html':'UTF-8'}
+												<td class="alert_msg">
+													{l s='Detenido' mod='quartupsearcher'} - {$qlines.cod_detention|escape:'html':'UTF-8'}
 													{/if}
 												</td>
-												<td></td>
+												<td class="alert_msg" style="text-align: right;">
+													{foreach from=$qlines.aaToReceive item=qaToReceive}
+														{if (!empty($qaToReceive.dateToReceive))}
+															{assign var="fecha" value=DateTime::createFromFormat('Ymd', $qaToReceive.dateToReceive)}
+															{$fecha->format('d/m/Y')}
+														{/if}
+													{/foreach}
+
+												</td>
 											</tr>
 										{/foreach}
 										</tbody>

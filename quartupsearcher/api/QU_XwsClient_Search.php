@@ -1,6 +1,6 @@
 <?php
 
-class QU_XwsClient {
+class QU_XwsClient_Search {
 
     private $swWS;
     private $aConfig;
@@ -19,7 +19,7 @@ class QU_XwsClient {
      * @param integer   $debug 		Nivel de debug 0:no | 1:printa los datos recibidos | 2: printa request i response | 3: printa todo el stacktrace
      * @param mixed     $iniConfig	Archivo 'ini' de configuración, opcional, por defecto usa 'QU_XwsClient.ini', o bien array de configuración
      * @param boolean   $swWS       Indicador de si queremos usar webservices (true, por defecto), o trabajar a pelo (false, mejorando drásticamente el rendimiento)
-     * @return QU_XwsClient
+     * @return QU_XwsClient_Search
      */
     function __construct($debug=0, $iniConfig='QU_XwsClient_local.ini.php', $swWS=true){
         $this->swWS  = $swWS;

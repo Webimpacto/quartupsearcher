@@ -1,6 +1,6 @@
 <?php
 
-require 'QU_XwsClient.php';
+require 'QU_XwsClient_Search.php';
 
 function executeWS ($oClient, $method, $aPar=array()) {
     $mtI0 = microtime(true);
@@ -28,7 +28,7 @@ $mtI = microtime(true);
 
 // creamos objeto
 
-$oClient = new QU_XwsClient(0, $aConfig, $swWS);
+$oClient = new QU_XwsClient_Search(0, $aConfig, $swWS);
 echo $oClient->getValidate() ? "Validated session.<br>\n" : "NOT VALIDATED SESSION !<br>\n";
 $mtI0 = microtime(true);
 echo "<b>Elapsed time constructor: ".(microtime(true)-$mtI0)."</b><br>\n";

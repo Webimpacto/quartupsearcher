@@ -28,7 +28,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once(dirname(__FILE__) . '/api/QU_XwsClient.php');
+require_once(dirname(__FILE__) . '/api/QU_XwsClient_Search.php');
 
 class Quartupsearcher extends Module
 {
@@ -309,7 +309,7 @@ class Quartupsearcher extends Module
     /**
      * Inicializa el cliente Quartup con las variables seteadas en la configuración del módulo
      * @param boolean $debug Si queremos que se muestre la información debug
-     * @return boolean|\QU_XwsClient false en caso fallido, cliente Quartup si todo fue bien
+     * @return boolean|\QU_XwsClient_Search false en caso fallido, cliente Quartup si todo fue bien
      */
     public function startQuartupClient($debug=false){
         if($debug){
@@ -322,7 +322,7 @@ class Quartupsearcher extends Module
         $aConfig['emp_quartup'] = Configuration::get('QUSEARCHER_EMP_SRV', null);
         $swWS = Configuration::get('QUSEARCHER_NUSOAP', null);
 
-        $quartupClient = new QU_XwsClient(0, $aConfig, $swWS);
+        $quartupClient = new QU_XwsClient_Search(0, $aConfig, $swWS);
         if($quartupClient->getValidate()){
             if($debug){
                 echo "<b>Elapsed time constructor: ".(microtime(true)-$mtI0)."</b><br>\n";
@@ -334,7 +334,7 @@ class Quartupsearcher extends Module
 
     /**
      * Ejecuta la función data en "method" contra la API
-     * @param QU_XwsClient $oClient Cliente Quartup
+     * @param QU_XwsClient_Search $oClient Cliente Quartup
      * @param string $method Nombre del método a lanzar contra la WSDL
      * @param array $aPar Array de datos para pasar a la API WSDL
      * @param boolean $debug Si queremos que se muestre la información debug
@@ -369,8 +369,8 @@ class Quartupsearcher extends Module
     public function getAdvancedOrders($id_customer){
         $aPar = array();
         //$aPar['id_shop'] = Context::getContext()->shop->id;
-        $aPar['id_customer'] = Context::getContext()->Cumtomer->id;
-        //$aPar['id_customer'] = '5582';
+        $aPar['id_customer'] = Context::getContext()->customer->id;
+        //$aPar['id_customer'] = '3';
         $aPar['date_from']   = '20160101';
         $aPar['date_to']     = '20160331';
         $aPar['sw_only_pending'] = '0';

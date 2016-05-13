@@ -58,7 +58,7 @@
                     <tr class="row-{$product.id|intval}">
                         <td>{$product.reference}</td>
                         <td>{$product.description}</td>
-                        <td>{$product.priceTaxExc}</td>
+                        <td>{$product.priceTaxExc|number_format:2:",":"."} €</td>
                         <td><input class="quantity" type="text" id="quantity-searcher" name="quantity-searcher" value="1" /></td>
                         <td>
                             <a class="button ajax_add_to_cart_button btn btn-default"
@@ -79,7 +79,7 @@
                     {if $product.stock > 0}
                         <tr class="msj-{$product.reference}">
                             <td colspan="5" class="text-center">
-                                <span class="label label-success">{l s='Artículo disponible '  mod='quartupsearcher'}</span>
+                                <span class="label label-success">{l s='Artículo disponible '  mod='quartupsearcher'}({$product.stock})</span>
                             </td>
                         </tr>
                     {elseif $product.stock <= 0}
